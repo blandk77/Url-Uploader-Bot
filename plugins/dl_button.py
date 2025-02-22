@@ -1,3 +1,9 @@
+
+# Don't Remove Credit Tg - @VJ_Botz
+# Subscribe YouTube Channel For Amazing Bot https://youtube.com/@Tech_VJ
+# Ask Doubt on telegram @KingVJ01
+
+# the logging things
 import logging
 
 logging.basicConfig(
@@ -135,6 +141,18 @@ async def ddl_call_back(bot, update):
 
             log_caption = f"From: {update.from_user.id}\n\n" + description
 
+            if not Config.TECH_VJ_LOG_CHANNEL:
+                logger.warning("TECH_VJ_LOG_CHANNEL is not set in config.py!")
+                await bot.send_message(chat_id=update.message.chat.id, text="Error: Log channel not configured.  Check your config.py file.") # inform the user of the error
+                return #stop processing
+
+            log_channel_id = Config.TECH_VJ_LOG_CHANNEL # avoid repeating Config.TECH_VJ_LOG_CHANNEL
+            logger.info(f"Log channel ID: {log_channel_id}")
+            logger.info(f"File path: {download_directory}")
+            logger.info(f"Thumbnail path: {thumb_image_path}")
+            logger.info(f"Log caption: {log_caption}")
+
+
             if tg_send_type == "audio":
                 try:
                     duration = await Mdata03(download_directory)
@@ -155,7 +173,7 @@ async def ddl_call_back(bot, update):
                     # Send to log channel
                     try:
                         await bot.send_audio(
-                            chat_id=Config.TECH_VJ_LOG_CHANNEL,
+                            chat_id=log_channel_id,
                             audio=download_directory,
                             caption=log_caption,
                             duration=duration,
@@ -163,7 +181,7 @@ async def ddl_call_back(bot, update):
                         )
                         logger.info("Audio sent to log channel successfully.")
                     except Exception as e:
-                        logger.error(f"Error sending audio to log channel: {e}")
+                        logger.error(f"Error sending audio to log channel: {e}, Exception: {e}")
 
                 except Exception as e:
                     logger.error(f"Error processing audio: {e}")
@@ -186,14 +204,14 @@ async def ddl_call_back(bot, update):
                     # Send to log channel
                     try:
                         await bot.send_document(
-                            chat_id=Config.TECH_VJ_LOG_CHANNEL,
+                            chat_id=log_channel_id,
                             document=download_directory,
                             thumb=thumb_image_path,
                             caption=log_caption,
                         )
                         logger.info("Document sent to log channel successfully.")
                     except Exception as e:
-                        logger.error(f"Error sending document to log channel: {e}")
+                        logger.error(f"Error sending document to log channel: {e}, Exception: {e}")
 
                 except Exception as e:
                     logger.error(f"Error processing file: {e}")
@@ -221,7 +239,7 @@ async def ddl_call_back(bot, update):
                     # Send to log channel
                     try:
                         await bot.send_video_note(
-                            chat_id=Config.TECH_VJ_LOG_CHANNEL,
+                            chat_id=log_channel_id,
                             video_note=download_directory,
                             duration=duration,
                             length=width,
@@ -229,7 +247,7 @@ async def ddl_call_back(bot, update):
                         )
                         logger.info("Video note sent to log channel successfully.")
                     except Exception as e:
-                        logger.error(f"Error sending video note to log channel: {e}")
+                        logger.error(f"Error sending video note to log channel: {e}, Exception: {e}")
 
                 except Exception as e:
                     logger.error(f"Error processing video note: {e}")
@@ -260,7 +278,7 @@ async def ddl_call_back(bot, update):
                     # Send to log channel
                     try:
                         await bot.send_video(
-                            chat_id=Config.TECH_VJ_LOG_CHANNEL,
+                            chat_id=log_channel_id,
                             video=download_directory,
                             caption=log_caption,
                             duration=duration,
@@ -271,7 +289,7 @@ async def ddl_call_back(bot, update):
                         )
                         logger.info("Video sent to log channel successfully.")
                     except Exception as e:
-                        logger.error(f"Error sending video to log channel: {e}")
+                        logger.error(f"Error sending video to log channel: {e}, Exception: {e}")
 
                 except Exception as e:
                     logger.error(f"Error processing video: {e}")
