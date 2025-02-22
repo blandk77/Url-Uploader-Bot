@@ -259,7 +259,7 @@ elif tg_send_type == "video":
                 message_id=update.message.id,
                 disable_web_page_preview=True
             )
-    else:
+else:
         await bot.edit_message_text(
             text=Translation.TECH_VJ_NO_VOID_FORMAT_FOUND.format("Incorrect Link"),
             chat_id=update.message.chat.id,
