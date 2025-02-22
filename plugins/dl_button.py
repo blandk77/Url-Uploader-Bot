@@ -122,7 +122,7 @@ async def ddl_call_back(bot, update):
             # ref: message from @VJ_BOTZ
             start_time = time.time()
             # try to upload file
-            if tg_send_type == "audio":
+if tg_send_type == "audio":
     duration = await Mdata03(download_directory)
     thumb_image_path = await Gthumb01(bot, update)
     await bot.send_audio(
