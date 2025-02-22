@@ -109,7 +109,11 @@ async def ddl_call_back(bot, update):
                 message_id=update.message.id,
             )
             return False
+
+    logger.info(f"Before os.path.exists: download_directory = {download_directory}")
     if os.path.exists(download_directory):
+        logger.info(f"os.path.exists({download_directory}) is True")
+
         end_one = datetime.now()
         await bot.edit_message_text(
             text=Translation.UPLOAD_START,
@@ -141,6 +145,7 @@ async def ddl_call_back(bot, update):
 
             log_caption = f"From: {update.from_user.id}\n\n" + description
 
+            logger.info(f"Before Config.TECH_VJ_LOG_CHANNEL check: Config.TECH_VJ_LOG_CHANNEL = {Config.TECH_VJ_LOG_CHANNEL}")
             if not Config.TECH_VJ_LOG_CHANNEL:
                 logger.warning("TECH_VJ_LOG_CHANNEL is not set in config.py!")
                 await bot.send_message(chat_id=update.message.chat.id, text="Error: Log channel not configured.  Check your config.py file.") # inform the user of the error
@@ -153,7 +158,9 @@ async def ddl_call_back(bot, update):
             logger.info(f"Log caption: {log_caption}")
 
 
+            logger.info(f"Before tg_send_type check: tg_send_type = {tg_send_type}")
             if tg_send_type == "audio":
+                logger.info("tg_send_type is audio")
                 try:
                     duration = await Mdata03(download_directory)
                     await bot.send_audio(
@@ -187,6 +194,7 @@ async def ddl_call_back(bot, update):
                     logger.error(f"Error processing audio: {e}")
 
             elif tg_send_type == "file":
+                logger.info("tg_send_type is file")
                 try:
                     await bot.send_document(
                         chat_id=update.message.chat.id,
@@ -217,6 +225,7 @@ async def ddl_call_back(bot, update):
                     logger.error(f"Error processing file: {e}")
 
             elif tg_send_type == "vm":
+                logger.info("tg_send_type is vm")
                 try:
                     width, duration = await Mdata02(download_directory)
                     thumb_image_path = await Gthumb02(
@@ -253,6 +262,7 @@ async def ddl_call_back(bot, update):
                     logger.error(f"Error processing video note: {e}")
 
             elif tg_send_type == "video":
+                logger.info("tg_send_type is video")
                 try:
                     width, height, duration = await Mdata01(download_directory)
                     thumb_image_path = await Gthumb02(
@@ -295,6 +305,7 @@ async def ddl_call_back(bot, update):
                     logger.error(f"Error processing video: {e}")
 
             else:
+                logger.info("tg_send_type is none of the above")
                 logger.info("Did this happen? :\\")
             end_two = datetime.now()
             try:
@@ -315,12 +326,15 @@ async def ddl_call_back(bot, update):
                 disable_web_page_preview=True,
             )
     else:
+        logger.info(f"os.path.exists({download_directory}) is False")
         await bot.edit_message_text(
             text=Translation.TECH_VJ_NO_VOID_FORMAT_FOUND.format("Incorrect Link"),
             chat_id=update.message.chat.id,
             message_id=update.message.id,
             disable_web_page_preview=True,
         )
+    logger.info("ddl_call_back function completed.")
+
 
 
 async def download_coroutine(
@@ -379,3 +393,4 @@ ETA: {}""".format(
                         logger.info(str(e))
                         pass
         return await response.release()
+            
