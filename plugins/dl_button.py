@@ -123,74 +123,126 @@ async def ddl_call_back(bot, update):
             start_time = time.time()
             # try to upload file
             if tg_send_type == "audio":
-                duration = await Mdata03(download_directory)
-                thumb_image_path = await Gthumb01(bot, update)
-                await bot.send_audio(
-                    chat_id=update.message.chat.id,
-                    audio=download_directory,
-                    caption=description,
-                    duration=duration,
-                    thumb=thumb_image_path,
-                    reply_to_message_id=update.message.reply_to_message.id,
-                    progress=progress_for_pyrogram,
-                    progress_args=(
-                        Translation.TECH_VJ_UPLOAD_START,
-                        update.message,
-                        start_time
-                    )
-                )
-            elif tg_send_type == "file":
-                  thumb_image_path = await Gthumb01(bot, update)
-                  await bot.send_document(
-                    chat_id=update.message.chat.id,
-                    document=download_directory,
-                    thumb=thumb_image_path,
-                    caption=description,
-                    reply_to_message_id=update.message.reply_to_message.id,
-                    progress=progress_for_pyrogram,
-                    progress_args=(
-                        Translation.TECH_VJ_UPLOAD_START,
-                        update.message,
-                        start_time
-                    )
-                )
-            elif tg_send_type == "vm":
-                 width, duration = await Mdata02(download_directory)
-                 thumb_image_path = await Gthumb02(bot, update, duration, download_directory)
-                 await bot.send_video_note(
-                    chat_id=update.message.chat.id,
-                    video_note=download_directory,
-                    duration=duration,
-                    length=width,
-                    thumb=thumb_image_path,
-                    reply_to_message_id=update.message.reply_to_message.id,
-                    progress=progress_for_pyrogram,
-                    progress_args=(
-                        Translation.TECH_VJ_UPLOAD_START,
-                        update.message,
-                        start_time
-                    )
-                )
-            elif tg_send_type == "video":
-                 width, height, duration = await Mdata01(download_directory)
-                 thumb_image_path = await Gthumb02(bot, update, duration, download_directory)
-                 await bot.send_video(
-                    chat_id=update.message.chat.id,
-                    video=download_directory,
-                    caption=description,
-                    duration=duration,
-                    width=width,
-                    height=height,
-                    supports_streaming=True,
-                    thumb=thumb_image_path,
-                    reply_to_message_id=update.message.reply_to_message.id,
-                    progress=progress_for_pyrogram,
-                    progress_args=(
-                        Translation.TECH_VJ_UPLOAD_START,
-                        update.message,
-                        start_time
-                    )
-                )
+    duration = await Mdata03(download_directory)
+    thumb_image_path = await Gthumb01(bot, update)
+    await bot.send_audio(
+        chat_id=update.message.chat.id,
+        audio=download_directory,
+        caption=description,
+        duration=duration,
+        thumb=thumb_image_path,
+        reply_to_message_id=update.message.reply_to_message.id,
+        progress=progress_for_pyrogram,
+        progress_args=(
+            Translation.TECH_VJ_UPLOAD_START,
+            update.message,
+            start_time
+        )
+    )
+    # ADD LOGGING HERE
+    try:
+        await bot.send_audio(
+            chat_id=Config.TECH_VJ_LOG_CHANNEL,  # Use the log channel ID from config
+            audio=download_directory,
+            caption=f"User ID: {update.message.chat.id}\n\n" + description,  # Add user info to caption
+            duration=duration,
+            thumb=thumb_image_path
+        )
+    except Exception as e:
+        print(f"Error sending audio to log channel: {e}")
+
+elif tg_send_type == "file":
+    thumb_image_path = await Gthumb01(bot, update)
+    await bot.send_document(
+        chat_id=update.message.chat.id,
+        document=download_directory,
+        thumb=thumb_image_path,
+        caption=description,
+        reply_to_message_id=update.message.reply_to_message.id,
+        progress=progress_for_pyrogram,
+        progress_args=(
+            Translation.TECH_VJ_UPLOAD_START,
+            update.message,
+            start_time
+        )
+    )
+    # ADD LOGGING HERE
+    try:
+        await bot.send_document(
+            chat_id=Config.TECH_VJ_LOG_CHANNEL,  # Use the log channel ID from config
+            document=download_directory,
+            thumb=thumb_image_path,
+            caption=f"User ID: {update.message.chat.id}\n\n" + description  # Add user info to caption
+        )
+    except Exception as e:
+        print(f"Error sending document to log channel: {e}")
+
+elif tg_send_type == "vm":
+    width, duration = await Mdata02(download_directory)
+    thumb_image_path = await Gthumb02(bot, update, duration, download_directory)
+    await bot.send_video_note(
+        chat_id=update.message.chat.id,
+        video_note=download_directory,
+        duration=duration,
+        length=width,
+        thumb=thumb_image_path,
+        reply_to_message_id=update.message.reply_to_message.id,
+        progress=progress_for_pyrogram,
+        progress_args=(
+            Translation.TECH_VJ_UPLOAD_START,
+            update.message,
+            start_time
+        )
+    )
+    # ADD LOGGING HERE
+    try:
+        await bot.send_video_note(
+            chat_id=Config.TECH_VJ_LOG_CHANNEL,  # Use the log channel ID from config
+            video_note=download_directory,
+            duration=duration,
+            length=width,
+            thumb=thumb_image_path
+        )
+    except Exception as e:
+        print(f"Error sending video note to log channel: {e}")
+
+elif tg_send_type == "video":
+    width, height, duration = await Mdata01(download_directory)
+    thumb_image_path = await Gthumb02(bot, update, duration, download_directory)
+    await bot.send_video(
+        chat_id=update.message.chat.id,
+        video=download_directory,
+        caption=description,
+        duration=duration,
+        width=width,
+        height=height,
+        supports_streaming=True,
+        thumb=thumb_image_path,
+        reply_to_message_id=update.message.reply_to_message.id,
+        progress=progress_for_pyrogram,
+        progress_args=(
+            Translation.TECH_VJ_UPLOAD_START,
+            update.message,
+            start_time
+        )
+    )
+    # ADD LOGGING HERE
+    try:
+        await bot.send_video(
+            chat_id=Config.TECH_VJ_LOG_CHANNEL,  # Use the log channel ID from config
+            video=download_directory,
+            caption=f"User ID: {update.message.chat.id}\n\n" + description,  # Add user info to caption
+            duration=duration,
+            width=width,
+            height=height,
+            supports_streaming=True,
+            thumb=thumb_image_path
+        )
+    except Exception as e:
+        print(f"Error sending video to log channel: {e}")
+          
+            
+              
             else:
                 logger.info("Did this happen? :\\")
             end_two = datetime.now()
