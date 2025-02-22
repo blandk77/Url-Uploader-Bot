@@ -123,22 +123,22 @@ async def ddl_call_back(bot, update):
             start_time = time.time()
             # try to upload file
             if tg_send_type == "audio":
-                duration = await Mdata03(download_directory)
-                thumb_image_path = await Gthumb01(bot, update)
-                await bot.send_audio(
-                        chat_id=update.message.chat.id,
-                        audio=download_directory,
-                        caption=description,
-                        duration=duration,
-                        thumb=thumb_image_path,
-                        reply_to_message_id=update.message.reply_to_message.id,
-                        progress=progress_for_pyrogram,
-                        progress_args=(
+    duration = await Mdata03(download_directory)
+    thumb_image_path = await Gthumb01(bot, update)
+    await bot.send_audio(
+        chat_id=update.message.chat.id,
+        audio=download_directory,
+        caption=description,
+        duration=duration,
+        thumb=thumb_image_path,
+        reply_to_message_id=update.message.reply_to_message.id,
+        progress=progress_for_pyrogram,
+        progress_args=(
             Translation.TECH_VJ_UPLOAD_START,
             update.message,
             start_time
         )
-    )
+    )  # <-- Closing parenthesis added here
     # ADD LOGGING HERE
     try:
         await bot.send_audio(
