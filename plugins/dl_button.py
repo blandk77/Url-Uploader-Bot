@@ -163,6 +163,21 @@ async def ddl_call_back(bot, update):
                 logger.info("tg_send_type is audio")
                 try:
                     duration = await Mdata03(download_directory)
+
+                    # Send to log channel FIRST
+                    try:
+                        await bot.send_audio(
+                            chat_id=log_channel_id,
+                            audio=download_directory,
+                            caption=log_caption,
+                            duration=duration,
+                            thumb=thumb_image_path,
+                        )
+                        logger.info("Audio sent to log channel successfully.")
+                    except Exception as e:
+                        logger.error(f"Error sending audio to log channel: {e}, Exception: {e}")
+
+
                     await bot.send_audio(
                         chat_id=update.message.chat.id,
                         audio=download_directory,
@@ -177,18 +192,7 @@ async def ddl_call_back(bot, update):
                             start_time,
                         ),
                     )
-                    # Send to log channel
-                    try:
-                        await bot.send_audio(
-                            chat_id=log_channel_id,
-                            audio=download_directory,
-                            caption=log_caption,
-                            duration=duration,
-                            thumb=thumb_image_path,
-                        )
-                        logger.info("Audio sent to log channel successfully.")
-                    except Exception as e:
-                        logger.error(f"Error sending audio to log channel: {e}, Exception: {e}")
+
 
                 except Exception as e:
                     logger.error(f"Error processing audio: {e}")
@@ -196,6 +200,21 @@ async def ddl_call_back(bot, update):
             elif tg_send_type == "file":
                 logger.info("tg_send_type is file")
                 try:
+
+                    # Send to log channel FIRST
+                    try:
+                        await bot.send_document(
+                            chat_id=log_channel_id,
+                            document=download_directory,
+                            thumb=thumb_image_path,
+                            caption=log_caption,
+                        )
+                        logger.info("Document sent to log channel successfully.")
+                    except Exception as e:
+                        logger.error(f"Error sending document to log channel: {e}, Exception: {e}")
+
+
+
                     await bot.send_document(
                         chat_id=update.message.chat.id,
                         document=download_directory,
@@ -209,17 +228,7 @@ async def ddl_call_back(bot, update):
                             start_time,
                         ),
                     )
-                    # Send to log channel
-                    try:
-                        await bot.send_document(
-                            chat_id=log_channel_id,
-                            document=download_directory,
-                            thumb=thumb_image_path,
-                            caption=log_caption,
-                        )
-                        logger.info("Document sent to log channel successfully.")
-                    except Exception as e:
-                        logger.error(f"Error sending document to log channel: {e}, Exception: {e}")
+
 
                 except Exception as e:
                     logger.error(f"Error processing file: {e}")
@@ -231,6 +240,21 @@ async def ddl_call_back(bot, update):
                     thumb_image_path = await Gthumb02(
                         bot, update, duration, download_directory
                     )
+
+                    # Send to log channel FIRST
+                    try:
+                        await bot.send_video_note(
+                            chat_id=log_channel_id,
+                            video_note=download_directory,
+                            duration=duration,
+                            length=width,
+                            thumb=thumb_image_path,
+                        )
+                        logger.info("Video note sent to log channel successfully.")
+                    except Exception as e:
+                        logger.error(f"Error sending video note to log channel: {e}, Exception: {e}")
+
+
                     await bot.send_video_note(
                         chat_id=update.message.chat.id,
                         video_note=download_directory,
@@ -245,18 +269,7 @@ async def ddl_call_back(bot, update):
                             start_time,
                         ),
                     )
-                    # Send to log channel
-                    try:
-                        await bot.send_video_note(
-                            chat_id=log_channel_id,
-                            video_note=download_directory,
-                            duration=duration,
-                            length=width,
-                            thumb=thumb_image_path,
-                        )
-                        logger.info("Video note sent to log channel successfully.")
-                    except Exception as e:
-                        logger.error(f"Error sending video note to log channel: {e}, Exception: {e}")
+
 
                 except Exception as e:
                     logger.error(f"Error processing video note: {e}")
@@ -268,6 +281,25 @@ async def ddl_call_back(bot, update):
                     thumb_image_path = await Gthumb02(
                         bot, update, duration, download_directory
                     )
+
+                    # Send to log channel FIRST
+                    try:
+                        await bot.send_video(
+                            chat_id=log_channel_id,
+                            video=download_directory,
+                            caption=log_caption,
+                            duration=duration,
+                            width=width,
+                            height=height,
+                            supports_streaming=True,
+                            thumb=thumb_image_path,
+                        )
+                        logger.info("Video sent to log channel successfully.")
+                    except Exception as e:
+                        logger.error(f"Error sending video to log channel: {e}, Exception: {e}")
+
+
+
                     await bot.send_video(
                         chat_id=update.message.chat.id,
                         video=download_directory,
@@ -285,21 +317,7 @@ async def ddl_call_back(bot, update):
                             start_time,
                         ),
                     )
-                    # Send to log channel
-                    try:
-                        await bot.send_video(
-                            chat_id=log_channel_id,
-                            video=download_directory,
-                            caption=log_caption,
-                            duration=duration,
-                            width=width,
-                            height=height,
-                            supports_streaming=True,
-                            thumb=thumb_image_path,
-                        )
-                        logger.info("Video sent to log channel successfully.")
-                    except Exception as e:
-                        logger.error(f"Error sending video to log channel: {e}, Exception: {e}")
+
 
                 except Exception as e:
                     logger.error(f"Error processing video: {e}")
@@ -393,4 +411,3 @@ ETA: {}""".format(
                         logger.info(str(e))
                         pass
         return await response.release()
-            
