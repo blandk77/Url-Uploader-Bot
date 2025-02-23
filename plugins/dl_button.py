@@ -1,15 +1,11 @@
-
 # Don't Remove Credit Tg - @VJ_Botz
 # Subscribe YouTube Channel For Amazing Bot https://youtube.com/@Tech_VJ
 # Ask Doubt on telegram @KingVJ01
 
 # the logging things
 import logging
-
-logging.basicConfig(
-    level=logging.DEBUG,
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-)
+logging.basicConfig(level=logging.DEBUG,
+                    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 import asyncio
 import aiohttp
@@ -19,19 +15,15 @@ import os
 import shutil
 import time
 from datetime import datetime
-
 # the secret configuration specific things
 from config import Config
-
 # the Strings used for this "thing"
 from translation import Translation
 from plugins.custom_thumbnail import *
-
 logging.getLogger("pyrogram").setLevel(logging.WARNING)
 from helper_funcs.display_progress import progress_for_pyrogram, humanbytes, TimeFormatter
 from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
-
 # https://stackoverflow.com/a/37631799/4723940
 from PIL import Image
 
@@ -41,9 +33,8 @@ async def ddl_call_back(bot, update):
     cb_data = update.data
     # youtube_dl extractors
     tg_send_type, youtube_dl_format, youtube_dl_ext = cb_data.split("=")
-    thumb_image_path = (
-        Config.TECH_VJ_DOWNLOAD_LOCATION + "/" + str(update.from_user.id) + ".jpg"
-    )
+    thumb_image_path = Config.TECH_VJ_DOWNLOAD_LOCATION + \
+        "/" + str(update.from_user.id) + ".jpg"
     youtube_dl_url = update.message.reply_to_message.text
     custom_file_name = os.path.basename(youtube_dl_url)
     if "|" in youtube_dl_url:
@@ -58,7 +49,7 @@ async def ddl_call_back(bot, update):
                 elif entity.type == "url":
                     o = entity.offset
                     l = entity.length
-                    youtube_dl_url = youtube_dl_url[o : o + l]
+                    youtube_dl_url = youtube_dl_url[o:o + l]
         if youtube_dl_url is not None:
             youtube_dl_url = youtube_dl_url.strip()
         if custom_file_name is not None:
@@ -73,7 +64,7 @@ async def ddl_call_back(bot, update):
             elif entity.type == "url":
                 o = entity.offset
                 l = entity.length
-                youtube_dl_url = youtube_dl_url[o : o + l]
+                youtube_dl_url = youtube_dl_url[o:o + l]
     user = await bot.get_me()
     mention = user["mention"]
     description = Translation.TECH_VJ_CUSTOM_CAPTION_UL_FILE.format(mention)
@@ -81,11 +72,9 @@ async def ddl_call_back(bot, update):
     await bot.edit_message_text(
         text=Translation.DOWNLOAD_START,
         chat_id=update.message.chat.id,
-        message_id=update.message.id,
+        message_id=update.message.id
     )
-    tmp_directory_for_each_user = (
-        Config.TECH_VJ_DOWNLOAD_LOCATION + "/" + str(update.from_user.id)
-    )
+    tmp_directory_for_each_user = Config.TECH_VJ_DOWNLOAD_LOCATION + "/" + str(update.from_user.id)
     if not os.path.isdir(tmp_directory_for_each_user):
         os.makedirs(tmp_directory_for_each_user)
     download_directory = tmp_directory_for_each_user + "/" + custom_file_name
@@ -100,25 +89,21 @@ async def ddl_call_back(bot, update):
                 download_directory,
                 update.message.chat.id,
                 update.message.id,
-                c_time,
+                c_time
             )
         except asyncio.TimeoutError:
             await bot.edit_message_text(
                 text=Translation.TECH_VJ_SLOW_URL_DECED,
                 chat_id=update.message.chat.id,
-                message_id=update.message.id,
+                message_id=update.message.id
             )
             return False
-
-    logger.info(f"Before os.path.exists: download_directory = {download_directory}")
     if os.path.exists(download_directory):
-        logger.info(f"os.path.exists({download_directory}) is True")
-
         end_one = datetime.now()
         await bot.edit_message_text(
             text=Translation.UPLOAD_START,
             chat_id=update.message.chat.id,
-            message_id=update.message.id,
+            message_id=update.message.id
         )
         file_size = Config.TECH_VJ_TG_MAX_FILE_SIZE + 1
         try:
@@ -131,228 +116,107 @@ async def ddl_call_back(bot, update):
             await bot.edit_message_text(
                 chat_id=update.message.chat.id,
                 text=Translation.TECH_VJ_RCHD_TG_API_LIMIT,
-                message_id=update.message.id,
+                message_id=update.message.id
             )
         else:
             # ref: message from @VJ_BOTZ
             start_time = time.time()
             # try to upload file
-            try:
-                thumb_image_path = await Gthumb01(bot, update)  # Get thumbnail before sending
-            except Exception as e:
-                logger.error(f"Error generating thumbnail: {e}")
-                thumb_image_path = None
-
-            log_caption = f"From: {update.from_user.id}\n\n" + description
-
-            logger.info(f"Before Config.TECH_VJ_LOG_CHANNEL check: Config.TECH_VJ_LOG_CHANNEL = {Config.TECH_VJ_LOG_CHANNEL}")
-            if not Config.TECH_VJ_LOG_CHANNEL:
-                logger.warning("TECH_VJ_LOG_CHANNEL is not set in config.py!")
-                await bot.send_message(chat_id=update.message.chat.id, text="Error: Log channel not configured.  Check your config.py file.") # inform the user of the error
-                return #stop processing
-
-            log_channel_id = Config.TECH_VJ_LOG_CHANNEL # avoid repeating Config.TECH_VJ_LOG_CHANNEL
-            logger.info(f"Log channel ID: {log_channel_id}")
-            logger.info(f"File path: {download_directory}")
-            logger.info(f"Thumbnail path: {thumb_image_path}")
-            logger.info(f"Log caption: {log_caption}")
-
-
-            logger.info(f"Before tg_send_type check: tg_send_type = {tg_send_type}")
             if tg_send_type == "audio":
-                logger.info("tg_send_type is audio")
-                try:
-                    duration = await Mdata03(download_directory)
-
-                    async def send_to_user():
-                        await bot.send_audio(
-                            chat_id=update.message.chat.id,
-                            audio=download_directory,
-                            caption=description,
-                            duration=duration,
-                            thumb=thumb_image_path,
-                            reply_to_message_id=update.message.reply_to_message.id,
-                            progress=progress_for_pyrogram,
-                            progress_args=(
-                                Translation.TECH_VJ_UPLOAD_START,
-                                update.message,
-                                start_time,
-                            ),
-                        )
-
-                    async def send_to_log_channel():
-                        await bot.send_audio(
-                            chat_id=log_channel_id,
-                            audio=download_directory,
-                            caption=log_caption,
-                            duration=duration,
-                            thumb=thumb_image_path,
-                        )
-
-
-                    await asyncio.gather(send_to_user(), send_to_log_channel())
-                    logger.info("Audio sent to user and log channel successfully.")
-
-
-
-                except Exception as e:
-                    logger.error(f"Error processing audio: {e}")
-
+                duration = await Mdata03(download_directory)
+                thumb_image_path = await Gthumb01(bot, update)
+                await bot.send_audio(
+                    chat_id=update.message.chat.id,
+                    audio=download_directory,
+                    caption=description,
+                    duration=duration,
+                    thumb=thumb_image_path,
+                    reply_to_message_id=update.message.reply_to_message.id,
+                    progress=progress_for_pyrogram,
+                    progress_args=(
+                        Translation.TECH_VJ_UPLOAD_START,
+                        update.message,
+                        start_time
+                    )
+                )
             elif tg_send_type == "file":
-                logger.info("tg_send_type is file")
-                try:
-                    async def send_to_user():
-                        await bot.send_document(
-                            chat_id=update.message.chat.id,
-                            document=download_directory,
-                            thumb=thumb_image_path,
-                            caption=description,
-                            reply_to_message_id=update.message.reply_to_message.id,
-                            progress=progress_for_pyrogram,
-                            progress_args=(
-                                Translation.TECH_VJ_UPLOAD_START,
-                                update.message,
-                                start_time,
-                            ),
-                        )
-
-                    async def send_to_log_channel():
-                        await bot.send_document(
-                            chat_id=log_channel_id,
-                            document=download_directory,
-                            thumb=thumb_image_path,
-                            caption=log_caption,
-                        )
-
-                    await asyncio.gather(send_to_user(), send_to_log_channel())
-                    logger.info("Document sent to user and log channel successfully.")
-
-
-                except Exception as e:
-                    logger.error(f"Error processing file: {e}")
-
+                  thumb_image_path = await Gthumb01(bot, update)
+                  await bot.send_document(
+                    chat_id=update.message.chat.id,
+                    document=download_directory,
+                    thumb=thumb_image_path,
+                    caption=description,
+                    reply_to_message_id=update.message.reply_to_message.id,
+                    progress=progress_for_pyrogram,
+                    progress_args=(
+                        Translation.TECH_VJ_UPLOAD_START,
+                        update.message,
+                        start_time
+                    )
+                )
             elif tg_send_type == "vm":
-                logger.info("tg_send_type is vm")
-                try:
-                    width, duration = await Mdata02(download_directory)
-                    thumb_image_path = await Gthumb02(
-                        bot, update, duration, download_directory
+                 width, duration = await Mdata02(download_directory)
+                 thumb_image_path = await Gthumb02(bot, update, duration, download_directory)
+                 await bot.send_video_note(
+                    chat_id=update.message.chat.id,
+                    video_note=download_directory,
+                    duration=duration,
+                    length=width,
+                    thumb=thumb_image_path,
+                    reply_to_message_id=update.message.reply_to_message.id,
+                    progress=progress_for_pyrogram,
+                    progress_args=(
+                        Translation.TECH_VJ_UPLOAD_START,
+                        update.message,
+                        start_time
                     )
-
-                    async def send_to_user():
-                        await bot.send_video_note(
-                            chat_id=update.message.chat.id,
-                            video_note=download_directory,
-                            duration=duration,
-                            length=width,
-                            thumb=thumb_image_path,
-                            reply_to_message_id=update.message.reply_to_message.id,
-                            progress=progress_for_pyrogram,
-                            progress_args=(
-                                Translation.TECH_VJ_UPLOAD_START,
-                                update.message,
-                                start_time,
-                            ),
-                        )
-
-                    async def send_to_log_channel():
-                        await bot.send_video_note(
-                            chat_id=log_channel_id,
-                            video_note=download_directory,
-                            duration=duration,
-                            length=width,
-                            thumb=thumb_image_path,
-                        )
-
-                    await asyncio.gather(send_to_user(), send_to_log_channel())
-                    logger.info("Video note sent to user and log channel successfully.")
-
-
-                except Exception as e:
-                    logger.error(f"Error processing video note: {e}")
-
+                )
             elif tg_send_type == "video":
-                logger.info("tg_send_type is video")
-                try:
-                    width, height, duration = await Mdata01(download_directory)
-                    thumb_image_path = await Gthumb02(
-                        bot, update, duration, download_directory
+                 width, height, duration = await Mdata01(download_directory)
+                 thumb_image_path = await Gthumb02(bot, update, duration, download_directory)
+                 await bot.send_video(
+                    chat_id=update.message.chat.id,
+                    video=download_directory,
+                    caption=description,
+                    duration=duration,
+                    width=width,
+                    height=height,
+                    supports_streaming=True,
+                    thumb=thumb_image_path,
+                    reply_to_message_id=update.message.reply_to_message.id,
+                    progress=progress_for_pyrogram,
+                    progress_args=(
+                        Translation.TECH_VJ_UPLOAD_START,
+                        update.message,
+                        start_time
                     )
-
-                    async def send_to_user():
-                        await bot.send_video(
-                            chat_id=update.message.chat.id,
-                            video=download_directory,
-                            caption=description,
-                            duration=duration,
-                            width=width,
-                            height=height,
-                            supports_streaming=True,
-                            thumb=thumb_image_path,
-                            reply_to_message_id=update.message.reply_to_message.id,
-                            progress=progress_for_pyrogram,
-                            progress_args=(
-                                Translation.TECH_VJ_UPLOAD_START,
-                                update.message,
-                                start_time,
-                            ),
-                        )
-
-                    async def send_to_log_channel():
-                        await bot.send_video(
-                            chat_id=log_channel_id,
-                            video=download_directory,
-                            caption=log_caption,
-                            duration=duration,
-                            width=width,
-                            height=height,
-                            supports_streaming=True,
-                            thumb=thumb_image_path,
-                        )
-
-                    await asyncio.gather(send_to_user(), send_to_log_channel())
-                    logger.info("Video sent to user and log channel successfully.")
-
-
-                except Exception as e:
-                    logger.error(f"Error processing video: {e}")
-
+                )
             else:
-                logger.info("tg_send_type is none of the above")
                 logger.info("Did this happen? :\\")
             end_two = datetime.now()
             try:
                 os.remove(download_directory)
-                if thumb_image_path and os.path.exists(thumb_image_path):
-                    os.remove(thumb_image_path)
-            except Exception as e:
-                logger.error(f"Error removing files: {e}")
-
+                os.remove(thumb_image_path)
+            except:
+                pass
             time_taken_for_download = (end_one - start).seconds
             time_taken_for_upload = (end_two - end_one).seconds
             await bot.edit_message_text(
-                text=Translation.TECH_VJ_AFTER_SUCCESSFUL_UPLOAD_MSG_WITH_TS.format(
-                    time_taken_for_download, time_taken_for_upload
-                ),
+                text=Translation.TECH_VJ_AFTER_SUCCESSFUL_UPLOAD_MSG_WITH_TS.format(time_taken_for_download, time_taken_for_upload),
                 chat_id=update.message.chat.id,
                 message_id=update.message.id,
-                disable_web_page_preview=True,
+                disable_web_page_preview=True
             )
     else:
-        logger.info(f"os.path.exists({download_directory}) is False")
         await bot.edit_message_text(
             text=Translation.TECH_VJ_NO_VOID_FORMAT_FOUND.format("Incorrect Link"),
             chat_id=update.message.chat.id,
             message_id=update.message.id,
-            disable_web_page_preview=True,
+            disable_web_page_preview=True
         )
-    logger.info("ddl_call_back function completed.")
 
 
-
-async def download_coroutine(
-    bot, session, url, file_name, chat_id, message_id, start
-):
+async def download_coroutine(bot, session, url, file_name, chat_id, message_id, start):
     downloaded = 0
     display_message = ""
     async with session.get(url, timeout=Config.TECH_VJ_PROCESS_MAX_TIMEOUT) as response:
@@ -365,9 +229,7 @@ async def download_coroutine(
             message_id,
             text="""Initiating Download
 URL: {}
-File Size: {}""".format(
-                url, humanbytes(total_length)
-            ),
+File Size: {}""".format(url, humanbytes(total_length))
         )
         with open(file_name, "wb") as f_handle:
             while True:
@@ -383,8 +245,7 @@ File Size: {}""".format(
                     speed = downloaded / diff
                     elapsed_time = round(diff) * 1000
                     time_to_completion = round(
-                        (total_length - downloaded) / speed
-                    ) * 1000
+                        (total_length - downloaded) / speed) * 1000
                     estimated_total_time = elapsed_time + time_to_completion
                     try:
                         current_message = """**Download Status**
@@ -392,14 +253,16 @@ URL: {}
 File Size: {}
 Downloaded: {}
 ETA: {}""".format(
-                            url,
-                            humanbytes(total_length),
-                            humanbytes(downloaded),
-                            TimeFormatter(estimated_total_time),
-                        )
+    url,
+    humanbytes(total_length),
+    humanbytes(downloaded),
+    TimeFormatter(estimated_total_time)
+)
                         if current_message != display_message:
                             await bot.edit_message_text(
-                                chat_id, message_id, text=current_message
+                                chat_id,
+                                message_id,
+                                text=current_message
                             )
                             display_message = current_message
                     except Exception as e:
