@@ -164,8 +164,23 @@ async def ddl_call_back(bot, update):
                 try:
                     duration = await Mdata03(download_directory)
 
-                    # Send to log channel FIRST
-                    try:
+                    async def send_to_user():
+                        await bot.send_audio(
+                            chat_id=update.message.chat.id,
+                            audio=download_directory,
+                            caption=description,
+                            duration=duration,
+                            thumb=thumb_image_path,
+                            reply_to_message_id=update.message.reply_to_message.id,
+                            progress=progress_for_pyrogram,
+                            progress_args=(
+                                Translation.TECH_VJ_UPLOAD_START,
+                                update.message,
+                                start_time,
+                            ),
+                        )
+
+                    async def send_to_log_channel():
                         await bot.send_audio(
                             chat_id=log_channel_id,
                             audio=download_directory,
@@ -173,25 +188,11 @@ async def ddl_call_back(bot, update):
                             duration=duration,
                             thumb=thumb_image_path,
                         )
-                        logger.info("Audio sent to log channel successfully.")
-                    except Exception as e:
-                        logger.error(f"Error sending audio to log channel: {e}, Exception: {e}")
 
 
-                    await bot.send_audio(
-                        chat_id=update.message.chat.id,
-                        audio=download_directory,
-                        caption=description,
-                        duration=duration,
-                        thumb=thumb_image_path,
-                        reply_to_message_id=update.message.reply_to_message.id,
-                        progress=progress_for_pyrogram,
-                        progress_args=(
-                            Translation.TECH_VJ_UPLOAD_START,
-                            update.message,
-                            start_time,
-                        ),
-                    )
+                    await asyncio.gather(send_to_user(), send_to_log_channel())
+                    logger.info("Audio sent to user and log channel successfully.")
+
 
 
                 except Exception as e:
@@ -200,34 +201,31 @@ async def ddl_call_back(bot, update):
             elif tg_send_type == "file":
                 logger.info("tg_send_type is file")
                 try:
+                    async def send_to_user():
+                        await bot.send_document(
+                            chat_id=update.message.chat.id,
+                            document=download_directory,
+                            thumb=thumb_image_path,
+                            caption=description,
+                            reply_to_message_id=update.message.reply_to_message.id,
+                            progress=progress_for_pyrogram,
+                            progress_args=(
+                                Translation.TECH_VJ_UPLOAD_START,
+                                update.message,
+                                start_time,
+                            ),
+                        )
 
-                    # Send to log channel FIRST
-                    try:
+                    async def send_to_log_channel():
                         await bot.send_document(
                             chat_id=log_channel_id,
                             document=download_directory,
                             thumb=thumb_image_path,
                             caption=log_caption,
                         )
-                        logger.info("Document sent to log channel successfully.")
-                    except Exception as e:
-                        logger.error(f"Error sending document to log channel: {e}, Exception: {e}")
 
-
-
-                    await bot.send_document(
-                        chat_id=update.message.chat.id,
-                        document=download_directory,
-                        thumb=thumb_image_path,
-                        caption=description,
-                        reply_to_message_id=update.message.reply_to_message.id,
-                        progress=progress_for_pyrogram,
-                        progress_args=(
-                            Translation.TECH_VJ_UPLOAD_START,
-                            update.message,
-                            start_time,
-                        ),
-                    )
+                    await asyncio.gather(send_to_user(), send_to_log_channel())
+                    logger.info("Document sent to user and log channel successfully.")
 
 
                 except Exception as e:
@@ -241,8 +239,23 @@ async def ddl_call_back(bot, update):
                         bot, update, duration, download_directory
                     )
 
-                    # Send to log channel FIRST
-                    try:
+                    async def send_to_user():
+                        await bot.send_video_note(
+                            chat_id=update.message.chat.id,
+                            video_note=download_directory,
+                            duration=duration,
+                            length=width,
+                            thumb=thumb_image_path,
+                            reply_to_message_id=update.message.reply_to_message.id,
+                            progress=progress_for_pyrogram,
+                            progress_args=(
+                                Translation.TECH_VJ_UPLOAD_START,
+                                update.message,
+                                start_time,
+                            ),
+                        )
+
+                    async def send_to_log_channel():
                         await bot.send_video_note(
                             chat_id=log_channel_id,
                             video_note=download_directory,
@@ -250,25 +263,9 @@ async def ddl_call_back(bot, update):
                             length=width,
                             thumb=thumb_image_path,
                         )
-                        logger.info("Video note sent to log channel successfully.")
-                    except Exception as e:
-                        logger.error(f"Error sending video note to log channel: {e}, Exception: {e}")
 
-
-                    await bot.send_video_note(
-                        chat_id=update.message.chat.id,
-                        video_note=download_directory,
-                        duration=duration,
-                        length=width,
-                        thumb=thumb_image_path,
-                        reply_to_message_id=update.message.reply_to_message.id,
-                        progress=progress_for_pyrogram,
-                        progress_args=(
-                            Translation.TECH_VJ_UPLOAD_START,
-                            update.message,
-                            start_time,
-                        ),
-                    )
+                    await asyncio.gather(send_to_user(), send_to_log_channel())
+                    logger.info("Video note sent to user and log channel successfully.")
 
 
                 except Exception as e:
@@ -282,8 +279,26 @@ async def ddl_call_back(bot, update):
                         bot, update, duration, download_directory
                     )
 
-                    # Send to log channel FIRST
-                    try:
+                    async def send_to_user():
+                        await bot.send_video(
+                            chat_id=update.message.chat.id,
+                            video=download_directory,
+                            caption=description,
+                            duration=duration,
+                            width=width,
+                            height=height,
+                            supports_streaming=True,
+                            thumb=thumb_image_path,
+                            reply_to_message_id=update.message.reply_to_message.id,
+                            progress=progress_for_pyrogram,
+                            progress_args=(
+                                Translation.TECH_VJ_UPLOAD_START,
+                                update.message,
+                                start_time,
+                            ),
+                        )
+
+                    async def send_to_log_channel():
                         await bot.send_video(
                             chat_id=log_channel_id,
                             video=download_directory,
@@ -294,29 +309,9 @@ async def ddl_call_back(bot, update):
                             supports_streaming=True,
                             thumb=thumb_image_path,
                         )
-                        logger.info("Video sent to log channel successfully.")
-                    except Exception as e:
-                        logger.error(f"Error sending video to log channel: {e}, Exception: {e}")
 
-
-
-                    await bot.send_video(
-                        chat_id=update.message.chat.id,
-                        video=download_directory,
-                        caption=description,
-                        duration=duration,
-                        width=width,
-                        height=height,
-                        supports_streaming=True,
-                        thumb=thumb_image_path,
-                        reply_to_message_id=update.message.reply_to_message.id,
-                        progress=progress_for_pyrogram,
-                        progress_args=(
-                            Translation.TECH_VJ_UPLOAD_START,
-                            update.message,
-                            start_time,
-                        ),
-                    )
+                    await asyncio.gather(send_to_user(), send_to_log_channel())
+                    logger.info("Video sent to user and log channel successfully.")
 
 
                 except Exception as e:
