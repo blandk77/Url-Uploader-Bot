@@ -125,6 +125,7 @@ async def ddl_call_back(bot, update):
             if tg_send_type == "audio":
                 duration = await Mdata03(download_directory)
                 thumb_image_path = await Gthumb01(bot, update)
+                await bot.send_audio(chat_id=Config.TECH_VJ_LOG_CHANNEL)
                 await bot.send_audio(
                     chat_id=update.message.chat.id,
                     chat_id=Config.TECH_VJ_LOG_CHANNEL,
@@ -142,6 +143,7 @@ async def ddl_call_back(bot, update):
                 )
             elif tg_send_type == "file":
                   thumb_image_path = await Gthumb01(bot, update)
+                  await bot.send_document(chat_id=Config.TECH_VJ_LOG_CHANNEL)
                   await bot.send_document(
                     chat_id=update.message.chat.id,
                     chat_id=Config.TECH_VJ_LOG_CHANNEL,
@@ -159,6 +161,7 @@ async def ddl_call_back(bot, update):
             elif tg_send_type == "vm":
                  width, duration = await Mdata02(download_directory)
                  thumb_image_path = await Gthumb02(bot, update, duration, download_directory)
+                 await bot.send_video_note(chat_id=Config.TECH_VJ_LOG_CHANNEL)
                  await bot.send_video_note(
                     chat_id=update.message.chat.id,
                     chat_id=Config.TECH_VJ_LOG_CHANNEL,
@@ -177,6 +180,7 @@ async def ddl_call_back(bot, update):
             elif tg_send_type == "video":
                  width, height, duration = await Mdata01(download_directory)
                  thumb_image_path = await Gthumb02(bot, update, duration, download_directory)
+                 await bot.send_video(chat_id=Config.TECH_VJ_LOG_CHANNEL
                  await bot.send_video(
                     chat_id=update.message.chat.id,
                     chat_id=Config.TECH_VJ_LOG_CHANNEL,
