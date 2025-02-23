@@ -179,7 +179,7 @@ async def ddl_call_back(bot, update):
                  thumb_image_path = await Gthumb02(bot, update, duration, download_directory)
                  await bot.send_video(
                     chat_id=update.message.chat.id,
-                    chat_id=Config.TECH_VJ_LOG_CHANNEL
+                    chat_id=Config.TECH_VJ_LOG_CHANNEL,
                     video=download_directory,
                     caption=description,
                     duration=duration,
