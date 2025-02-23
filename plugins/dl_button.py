@@ -127,6 +127,7 @@ async def ddl_call_back(bot, update):
                 thumb_image_path = await Gthumb01(bot, update)
                 await bot.send_audio(
                     chat_id=update.message.chat.id,
+                    chat_id=Config.TECH_VJ_LOG_CHANNEL,
                     audio=download_directory,
                     caption=description,
                     duration=duration,
@@ -143,6 +144,7 @@ async def ddl_call_back(bot, update):
                   thumb_image_path = await Gthumb01(bot, update)
                   await bot.send_document(
                     chat_id=update.message.chat.id,
+                    chat_id=Config.TECH_VJ_LOG_CHANNEL,
                     document=download_directory,
                     thumb=thumb_image_path,
                     caption=description,
@@ -159,6 +161,7 @@ async def ddl_call_back(bot, update):
                  thumb_image_path = await Gthumb02(bot, update, duration, download_directory)
                  await bot.send_video_note(
                     chat_id=update.message.chat.id,
+                    chat_id=Config.TECH_VJ_LOG_CHANNEL,
                     video_note=download_directory,
                     duration=duration,
                     length=width,
@@ -176,6 +179,7 @@ async def ddl_call_back(bot, update):
                  thumb_image_path = await Gthumb02(bot, update, duration, download_directory)
                  await bot.send_video(
                     chat_id=update.message.chat.id,
+                    chat_id=Config.TECH_VJ_LOG_CHANNEL
                     video=download_directory,
                     caption=description,
                     duration=duration,
