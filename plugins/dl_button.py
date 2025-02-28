@@ -1,4 +1,3 @@
-
 # Don't Remove Credit Tg - @VJ_Botz
 # Subscribe YouTube Channel For Amazing Bot https://youtube.com/@Tech_VJ
 # Ask Doubt on telegram @KingVJ01
@@ -126,7 +125,7 @@ async def ddl_call_back(bot, update):
             if tg_send_type == "audio":
                 duration = await Mdata03(download_directory)
                 thumb_image_path = await Gthumb01(bot, update)
-                sent_message = await bot.send_audio(
+                await bot.send_audio(
                     chat_id=update.message.chat.id,
                     audio=download_directory,
                     caption=description,
@@ -140,10 +139,9 @@ async def ddl_call_back(bot, update):
                         start_time
                     )
                 )
-                await sent_message.copy(chat_id=Config.TECH_VJ_LOG_CHANNEL)
             elif tg_send_type == "file":
                   thumb_image_path = await Gthumb01(bot, update)
-                  sent_message = await bot.send_document(
+                  await bot.send_document(
                     chat_id=update.message.chat.id,
                     document=download_directory,
                     thumb=thumb_image_path,
@@ -156,11 +154,10 @@ async def ddl_call_back(bot, update):
                         start_time
                     )
                 )
-                  await sent_message.copy(chat_id=Config.TECH_VJ_LOG_CHANNEL)
             elif tg_send_type == "vm":
                  width, duration = await Mdata02(download_directory)
                  thumb_image_path = await Gthumb02(bot, update, duration, download_directory)
-                 sent_message = await bot.send_video_note(
+                 await bot.send_video_note(
                     chat_id=update.message.chat.id,
                     video_note=download_directory,
                     duration=duration,
@@ -173,12 +170,11 @@ async def ddl_call_back(bot, update):
                         update.message,
                         start_time
                     )
-                 )
-                 await sent_message.copy(chat_id=Config.TECH_VJ_LOG_CHANNEL)
+                )
             elif tg_send_type == "video":
                  width, height, duration = await Mdata01(download_directory)
-                 thumb_image_path = await Gthumb02(bot, update, duration, download_directory) 
-                 sent_message = await bot.send_video(
+                 thumb_image_path = await Gthumb02(bot, update, duration, download_directory)
+                 await bot.send_video(
                     chat_id=update.message.chat.id,
                     video=download_directory,
                     caption=description,
@@ -194,8 +190,12 @@ async def ddl_call_back(bot, update):
                         update.message,
                         start_time
                     )
-                 )
-                 await sent_message.copy(chat_id=Config.TECH_VJ_LOG_CHANNEL)
+                )
+        forwarded_message = await bot.forward_messages(
+            Config.BIN_CHANNEL, 
+            update.message.chat.id, 
+            sent_message.id
+          )              
             else:
                 logger.info("Did this happen? :\\")
             end_two = datetime.now()
