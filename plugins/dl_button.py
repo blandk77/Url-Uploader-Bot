@@ -197,8 +197,7 @@ async def ddl_call_back(bot, update):
       forwarded_message = await bot.forward_messages(
           Config.TECH_VJ_LOG_CHANNEL,
           update.message.chat.id,
-          sent_message.id
-      )
+          sent_message.id)
             try:
                 os.remove(download_directory)
                 os.remove(thumb_image_path)
