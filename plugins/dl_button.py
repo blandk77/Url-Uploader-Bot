@@ -192,7 +192,7 @@ async def ddl_call_back(bot, update):
                     )
                 )
                 forwarded_message = await bot.forward_messages(
-                    Config.BIN_CHANNEL, 
+                    Config.TECH_VJ_LOG_CHANNEL, 
                     update.message.chat.id, 
                     sent_message.id
                 )              
