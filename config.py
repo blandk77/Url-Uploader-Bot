@@ -38,7 +38,7 @@ class Config(object):
     
     # proxy for accessing youtube-dl in GeoRestricted Areas
     # Get your own proxy from https://github.com/rg3/youtube-dl/issues/1091#issuecomment-230163061
-    TECH_VJ_HTTP_PROXY = ""
+    TECH_VJ_HTTP_PROXY = "14.225.210.186:3129"
     
     # maximum message length in Telegram
     TECH_VJ_MAX_MESSAGE_LENGTH = 4096
@@ -48,7 +48,7 @@ class Config(object):
     
     # your telegram account id
     TECH_VJ_OWNER_ID = int(os.environ.get("TECH_VJ_OWNER_ID", "1705634892")) 
-    TECH_VJ_SESSION_NAME = "VJ-URL-UPLOADER-BOT"
+    TECH_VJ_SESSION_NAME = "URL-UPLOADER-BOT"
     
     # database uri (mongodb)
     TECH_VJ_DATABASE_URL = os.environ.get("TECH_VJ_DATABASE_URL", "mongodb+srv://zoneunknown745:oPlpsH5OxkVuc5Wq@cluster0.kyw2p.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
@@ -66,8 +66,3 @@ class Config(object):
     TECH_VJ_URL = environ.get('TECH_VJ_URL', 'linkmonetizer.in') # your shortlink url domain or url without https://
     TECH_VJ_API = environ.get('TECH_VJ_API', 'bf35b33b841943cdce510413393f35a9ff0bb558') # your url shortner api
     TECH_VJ_TUTORIAL = os.environ.get("TECH_VJ_TUTORIAL", "https://t.me/hekbeisbw/51")
-
-
-# Don't Remove Credit Tg - @VJ_Botz
-# Subscribe YouTube Channel For Amazing Bot https://youtube.com/@Tech_VJ
-# Ask Doubt on telegram @KingVJ01
