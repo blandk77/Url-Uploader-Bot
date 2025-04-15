@@ -1,7 +1,3 @@
-# Don't Remove Credit Tg - @VJ_Botz
-# Subscribe YouTube Channel For Amazing Bot https://youtube.com/@Tech_VJ
-# Ask Doubt on telegram @KingVJ01
-
 import os
 import re
 from os import environ, getenv
@@ -38,7 +34,7 @@ class Config(object):
     
     # proxy for accessing youtube-dl in GeoRestricted Areas
     # Get your own proxy from https://github.com/rg3/youtube-dl/issues/1091#issuecomment-230163061
-    TECH_VJ_HTTP_PROXY = "14.225.210.186:3129"
+    TECH_VJ_HTTP_PROXY = "43.135.177.135:13001"
     
     # maximum message length in Telegram
     TECH_VJ_MAX_MESSAGE_LENGTH = 4096
