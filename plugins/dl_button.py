@@ -1,8 +1,3 @@
-# Don't Remove Credit Tg - @VJ_Botz
-# Subscribe YouTube Channel For Amazing Bot https://youtube.com/@Tech_VJ
-# Ask Doubt on telegram @KingVJ01
-
-# the logging things
 import logging
 logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -15,16 +10,13 @@ import os
 import shutil
 import time
 from datetime import datetime
-# the secret configuration specific things
 from config import Config
-# the Strings used for this "thing"
 from translation import Translation
 from plugins.custom_thumbnail import *
 logging.getLogger("pyrogram").setLevel(logging.WARNING)
 from helper_funcs.display_progress import progress_for_pyrogram, humanbytes, TimeFormatter
 from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
-# https://stackoverflow.com/a/37631799/4723940
 from PIL import Image
 
 
@@ -194,10 +186,6 @@ async def ddl_call_back(bot, update):
             else:
                 logger.info("Did this happen? :\\")
             end_two = datetime.now()
-      forwarded_message = await bot.forward_messages(
-          Config.TECH_VJ_LOG_CHANNEL,
-          update.message.chat.id,
-          sent_message.id)
             try:
                 os.remove(download_directory)
                 os.remove(thumb_image_path)
