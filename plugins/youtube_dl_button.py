@@ -198,7 +198,7 @@ async def youtube_dl_call_back(bot, update):
         text="<b>ᴜᴘʟᴏᴀᴅᴇᴅ sᴜᴄᴄᴇssғᴜʟʟʏ ✔️\n\nᴊᴏɪɴ @The_TGguy</b>",
         chat_id=update.message.chat.id,
         message_id=update.message.id,
-        disable_web_page_preview=True
+        disable_web_page_preview=True,
         await asyncio.sleep(1800)
         try:
             await text.delete()
