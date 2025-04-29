@@ -198,13 +198,13 @@ async def youtube_dl_call_back(bot, update):
         text="<b>ᴜᴘʟᴏᴀᴅᴇᴅ sᴜᴄᴄᴇssғᴜʟʟʏ ✔️\n\nᴊᴏɪɴ @The_TGguy</b>",
         chat_id=update.message.chat.id,
         message_id=update.message.id,
-        disable_web_page_preview=True,
+        disable_web_page_preview=True
+        )
         await asyncio.sleep(1800)
         try:
             await text.delete()
         except Exception as e:
-            print(f"Failed to delete message after 30 minutes:{e}")
-    )
+            print(f"Failed to delete message after 30 minutes: {e}")        
     except Exception as e:
         asyncio.create_task(clendir(download_directory))
         await bot.edit_message_text(text=Translation.TECH_VJ_ERROR.format(e),
